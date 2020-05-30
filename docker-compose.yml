@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  web-server:
+    image: test-server:latest
+    ports:
+    - "8080:8080"
+  locust-master:
+    image: my-locust:latest
+    ports:
+    - "3000:3000"
+    command: --master --host http://web-server:8080 --web-port 3000
+  locust-worker:
+    image: my-locust:latest
+    command: --worker --master-host locust-master
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.7.0
+    ports:
+      - "5601:5601"
