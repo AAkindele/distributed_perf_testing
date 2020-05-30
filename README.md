@@ -1,7 +1,7 @@
 TODO:
 - send data directly from locust to elasticsearch.
-  - come up with mapping definition first
   - not worrying about impact on the locust workers at this time
+  - need to also include information about the host where the data is coming from
 - k8s cluster and resource definitions
 
 Goal: Distributed performance testing with Locust, Kubernetes, Elasticsearch.
@@ -23,3 +23,38 @@ docker-compose up
 - The Locust web ui can be reached at `http://localhost:3000/`.
 - Elasticsearch is avaiable at `http://localhost:9200/`.
 - Kibana is available at `http://localhost:5601/`.
+
+Create the index where the performance data will be stored. One way to do this is to use the Kibana console.
+Whichever way you choose, send a PUT request to the desired index. In this example that will be `/performance_data`.
+The example below is a mapping definition that will be sent in the performance_data index.
+```json
+{
+  "mappings": {
+    "properties": {
+      "request_type": { "type": "keyword" },
+      "name": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      },
+      "response_time": { "type": "double" },
+      "response_length": { "type": "integer" },
+      "args": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      },
+      "exception": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      },
+      "is_success": { "type": "boolean" },
+      "timestamp": { "type": "date" }
+    }
+  }
+}
+```

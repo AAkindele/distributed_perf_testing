@@ -29,5 +29,5 @@ def request_failure_handler(request_type, name, response_time, response_length, 
   print(name) # "/does_not_exist"
   print(response_time) # "1.703500747680664" milliseconds
   print(response_length) # "154" bytes
-  print(exception) # Exception instance : 404 Client Error: Not Found for url: http://web-server:8080/does_not_exist
   print(args) # "{}"
+  print(exception) # Exception instance : 404 Client Error: Not Found for url: http://web-server:8080/does_not_exist
