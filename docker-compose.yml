@@ -9,9 +9,13 @@ services:
     ports:
     - "3000:3000"
     command: --master --host http://web-server:8080 --web-port 3000
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
   locust-worker:
     image: my-locust:latest
     command: --worker --master-host locust-master
+    environment:
+      - ELASTICSEARCH_HOST=elasticsearch
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
     environment:

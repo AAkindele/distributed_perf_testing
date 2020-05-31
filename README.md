@@ -1,7 +1,8 @@
 TODO:
 - send data directly from locust to elasticsearch.
-  - not worrying about impact on the locust workers at this time
   - need to also include information about the host where the data is coming from
+  - need to look into time based indices instead of a single index
+  - not worrying about impact on the locust workers at this time
 - k8s cluster and resource definitions
 
 Goal: Distributed performance testing with Locust, Kubernetes, Elasticsearch.
@@ -40,18 +41,13 @@ The example below is a mapping definition that will be sent in the performance_d
       },
       "response_time": { "type": "double" },
       "response_length": { "type": "integer" },
-      "args": {
+      "exception_message": {
         "type": "text",
         "fields": {
           "raw": { "type": "keyword" }
         }
       },
-      "exception": {
-        "type": "text",
-        "fields": {
-          "raw": { "type": "keyword" }
-        }
-      },
+      "exception_type": { "type": "keyword" },
       "is_success": { "type": "boolean" },
       "timestamp": { "type": "date" }
     }

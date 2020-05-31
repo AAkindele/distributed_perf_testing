@@ -1,4 +1,5 @@
 from locust import HttpUser, TaskSet, task, between, events
+from elasticsearch_store import ElasticsearchStore
 
 class UserTaskSet(TaskSet):
   @task(10)
@@ -13,21 +14,15 @@ class LocustUser(HttpUser):
   wait_time = between(1, 10)
   tasks = [UserTaskSet]
 
-@events.request_success.add_listener
-def request_success_handler(request_type, name, response_time, response_length, **args):
-  print("request_success_handler")
-  print(request_type) # "GET"
-  print(name) # "/"
-  print(response_time) # "3.9076805114746094" milliseconds
-  print(response_length) # "68" bytes
-  print(args) # "{}"
+  def __init__(self, environment):
+    super(LocustUser, self).__init__(environment)
+    self.store = ElasticsearchStore("performance_data")
 
-@events.request_failure.add_listener
-def request_failure_handler(request_type, name, response_time, response_length, exception, **args):
-  print("request_failure_handler")
-  print(request_type) # "GET"
-  print(name) # "/does_not_exist"
-  print(response_time) # "1.703500747680664" milliseconds
-  print(response_length) # "154" bytes
-  print(args) # "{}"
-  print(exception) # Exception instance : 404 Client Error: Not Found for url: http://web-server:8080/does_not_exist
+    def request_success_handler(request_type, name, response_time, response_length, *args, **kwargs):
+      self.store.save_data(request_type, name, response_time, response_length, None, *args, **kwargs)
+
+    def request_failure_handler(request_type, name, response_time, response_length, exception, *args, **kwargs):
+      self.store.save_data(request_type, name, response_time, response_length, exception, *args, **kwargs)
+
+    self.environment.events.request_success.add_listener(request_success_handler)
+    self.environment.events.request_failure.add_listener(request_failure_handler)
