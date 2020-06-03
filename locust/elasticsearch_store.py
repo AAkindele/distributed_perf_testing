@@ -26,7 +26,8 @@ class ElasticsearchStore:
       "exception_message": exception_message,
       "exception_type": exception_type,
       "is_success": is_success,
-      "timestamp": timestamp
+      "timestamp": timestamp,
+      "host": os.environ.get("HOSTNAME")
     }
 
     self.client.index(index=self.index, body=document)

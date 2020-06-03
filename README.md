@@ -49,7 +49,13 @@ The example below is a mapping definition that will be sent in the performance_d
       },
       "exception_type": { "type": "keyword" },
       "is_success": { "type": "boolean" },
-      "timestamp": { "type": "date" }
+      "timestamp": { "type": "date" },
+      "host": {
+        "type": "text",
+        "fields": {
+          "raw": { "type": "keyword" }
+        }
+      }
     }
   }
 }
