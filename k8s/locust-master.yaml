@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: locust-master
+  namespace: distributed-perf-testing
+  labels:
+    app: locust-master
+spec:
+  ports:
+  - name: http
+    port: 3000
+    targetPort: http
+    protocol: TCP
+  - name: transport
+    port: 5557
+    targetPort: transport
+    protocol: TCP
+  selector:
+    app: locust-master
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-master
+  namespace: distributed-perf-testing
+  labels:
+    app: locust-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locust-master
+  template:
+    metadata:
+      labels:
+        app: locust-master
+    spec:
+      containers:
+      - name: locust-master
+        image: aakindele/distributed_perf_testing.my-locust@sha256:31050206a48caf94589240afb4b5677b25ea8dfb40b4adae0a3601d3f1fe4777
+        args:
+        - --master
+        - --host=http://test-server:8080
+        - --web-port=3000
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        - name: transport
+          containerPort: 5557
+          protocol: TCP

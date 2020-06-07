@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locust-worker
+  namespace: distributed-perf-testing
+  labels:
+    app: locust-worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: locust-worker
+  template:
+    metadata:
+      labels:
+        app: locust-worker
+    spec:
+      containers:
+      - name: locust-worker
+        image: aakindele/distributed_perf_testing.my-locust@sha256:31050206a48caf94589240afb4b5677b25ea8dfb40b4adae0a3601d3f1fe4777
+        args:
+        - --worker
+        - --master-host=locust-master

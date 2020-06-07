@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-server
+  namespace: distributed-perf-testing
+  labels:
+    app: test-server
+spec:
+  ports:
+  - port: 8080
+    targetPort: http
+    protocol: TCP
+  selector:
+    app: test-server
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-server
+  namespace: distributed-perf-testing
+  labels:
+    app: test-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-server
+  template:
+    metadata:
+      labels:
+        app: test-server
+    spec:
+      containers:
+      - name: test-server
+        image: aakindele/distributed_perf_testing.test-server@sha256:b2c7256712ba0f2098fe4b0efa9cd764eb34300875226599d3dad8eea34e02bf
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP

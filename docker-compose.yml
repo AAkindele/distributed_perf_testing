@@ -2,10 +2,14 @@ version: '3.8'
 services:
   web-server:
     image: test-server:latest
+    # or use the pre-built image
+    # image: aakindele/distributed_perf_testing.test-server:latest
     ports:
     - "8080:8080"
   locust-master:
     image: my-locust:latest
+    # or use the pre-built image
+    # image: aakindele/distributed_perf_testing.my-locust:latest
     ports:
     - "3000:3000"
     command: --master --host http://web-server:8080 --web-port 3000
@@ -13,6 +17,8 @@ services:
       - ELASTICSEARCH_HOST=elasticsearch
   locust-worker:
     image: my-locust:latest
+    # or use the pre-built image
+    # image: aakindele/distributed_perf_testing.my-locust:latest
     command: --worker --master-host locust-master
     environment:
       - ELASTICSEARCH_HOST=elasticsearch

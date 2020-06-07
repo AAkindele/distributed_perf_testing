@@ -1,6 +1,5 @@
 TODO:
 - send data directly from locust to elasticsearch.
-  - need to also include information about the host where the data is coming from
   - need to look into time based indices instead of a single index
   - not worrying about impact on the locust workers at this time
 - k8s cluster and resource definitions
