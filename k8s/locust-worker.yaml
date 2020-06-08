@@ -22,3 +22,7 @@ spec:
         args:
         - --worker
         - --master-host=locust-master
+        resources:
+          requests:
+            cpu: 125m
+            memory: 128Mi
