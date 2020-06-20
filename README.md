@@ -1,8 +1,3 @@
-TODO:
-- send data directly from locust to elasticsearch.
-  - need to look into time based indices instead of a single index
-  - not worrying about impact on the locust workers at this time
-
 Goal: Distributed performance testing with Locust, Kubernetes, Elasticsearch.
 
 Testing locally with Docker Compose
